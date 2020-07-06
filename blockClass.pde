@@ -1,73 +1,3 @@
-import processing.core.*; 
-import processing.data.*; 
-import processing.event.*; 
-import processing.opengl.*; 
-
-import java.util.HashMap; 
-import java.util.ArrayList; 
-import java.io.File; 
-import java.io.BufferedReader; 
-import java.io.PrintWriter; 
-import java.io.InputStream; 
-import java.io.OutputStream; 
-import java.io.IOException; 
-
-public class tetris_battle extends PApplet {
-
-int Length = 1920;
-int Width = 1080;
-
-int turn = 0;
-int keyNoA = 0;
-int keyNoB = 0;
-int blockSize = 20;
-
-boolean playA = false;
-boolean playB = false;
-
-boolean spinA = false;
-boolean spinB = false;
-boolean spinableA = true;
-boolean spinableB = true;
-
-blockClass tetrisBlock[] = new blockClass[3];
-
-int I[] = {1, 1, 1, 1, 0, 0, 0, 0}; // I block
-int J[] = {0, 0, 1, 0, 1, 1, 1, 0}; // J block
-int L[] = {1, 1, 1, 0, 0, 0, 1, 0}; // L block
-int O[] = {0, 1, 1, 0, 0, 1, 1, 0}; // O block
-int S[] = {1, 1, 0, 0, 0, 1, 1, 0}; // S block
-int T[] = {0, 1, 0, 0, 1, 1, 1, 0}; // T block
-int Z[] = {0, 1, 1, 0, 1, 1, 0, 0}; // Z block
-
-public void setup(){
-    size(Length, Width);
-    frameRate(30);
-    for(int i = 0; i < 3; i++){
-    int x = 1000;
-    int y = 500;
-    tetrisBlock[i] = new blockClass(x, y);
-}
-}
-
-public void draw(){
-    turn = 1 - turn;
-    // keyNoA = 0;
-    // keyNoB = 0;
-    fill(255);
-    rect(0, 0, Length, Width);
-    // println("key is "+key);
-    // println("keyCode is "+keyCode);
-    // play();
-    tetrisBlock[0].drawBlock();
-    if((spinA || spinB) && (spinableA||spinableB)){
-        tetrisBlock[0].dir = (tetrisBlock[0].dir+1)%4;
-        spinableA = false;
-        spinableB = false;
-        spinA = false;
-        spinB = false;
-    }
-}
 class blockClass
 {
     int xpos;
@@ -84,17 +14,17 @@ class blockClass
         ypos = y;
         xvel = 0;
         yvel = 1;
-        shape = PApplet.parseInt(random(7));
-        type = PApplet.parseInt(random(2));
-        dir = PApplet.parseInt(random(4));
+        shape = int(random(7));
+        type = int(random(2));
+        dir = int(random(4));
     }
 
-    public void draw(){
+    void draw(){
         xpos = xpos+xvel;
         ypos = ypos+yvel;
     }
 
-    public void drawBlock(){
+    void drawBlock(){
         int block[] = new int[8];
         switch(shape){
             case 0:
@@ -210,124 +140,3 @@ class blockClass
 
 }
 
-public void keyPressed(){
-
-    if(key == 'a'||key == 's'||key == 'd'||key == 'w'){
-        playA = true;
-    }
-    else if(keyCode == 37||keyCode == 38||keyCode == 39||keyCode == 40){
-        playB = true;
-    }
-
-    switch(key){
-        case 'w':
-        keyNoA = 1;
-        spinA = true;
-        break;
-        case 'a':
-        keyNoA = 2;
-        break;
-        case 's':
-        keyNoA = 3;
-        break;
-        case 'd':
-        keyNoA = 4;
-        break;
-        case CODED:
-        switch(keyCode){
-            case UP:
-            keyNoB = 1;
-            spinB = true;
-            break;
-            case LEFT:
-            keyNoB = 2;
-            break;
-            case DOWN:
-            keyNoB = 3;
-            break;
-            case RIGHT:
-            keyNoB = 4;
-            break;
-        }
-        break;
-    }
-}
-
-public void keyReleased() {
-    if(key == 'a'||key == 's'||key == 'd'||key == 'w'){
-        playA = false;
-    }
-    else if(keyCode == 37||keyCode == 38||keyCode == 39||keyCode == 40){
-        playB = false;
-    }
-
-    if(key == 'w'){
-        spinableA = true;
-    }
-    if(keyCode == 38){
-        spinableB = true;
-    }
-}
-public void mousePressed(){
-    fill(255, 0, 0);
-    rect(50, 50, 300, 300);
-    fill(255);
-}
-public void play(){
-    if(playA){
-        switch(keyNoA){
-            case 0:
-            break;
-            case 1:
-            fill(0, 255, 0);
-            rect(500, 500, 500, 500);
-            break;
-            case 2:
-            fill(0, 0, 255);
-            rect(500, 500, 500, 500);
-            break;
-            case 3:
-            fill(255, 0, 0);
-            rect(500, 500, 500, 500);
-            break;
-            case 4:
-            fill(255, 255, 0);
-            rect(500, 500, 500, 500);
-            break;
-        }
-    }
-
-    if(playB){
-        switch(keyNoB){
-            case 0:
-            break;
-            case 1:
-            fill(0, 255, 0);
-            rect(1000, 500, 500, 500);
-            break;
-            case 2:
-            fill(0, 0, 255);
-            rect(1000, 500, 500, 500);
-            break;
-            case 3:
-            fill(255, 0, 0);
-            rect(1000, 500, 500, 500);
-            break;
-            case 4:
-            fill(255, 255, 0);
-            rect(1000, 500, 500, 500);
-            break;
-        }
-    } 
-
-    fill(255);
-}
-  static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "tetris_battle" };
-    if (passedArgs != null) {
-      PApplet.main(concat(appletArgs, passedArgs));
-    } else {
-      PApplet.main(appletArgs);
-    }
-  }
-}

@@ -10,6 +10,7 @@ void keyPressed(){
     switch(key){
         case 'w':
         keyNoA = 1;
+        spinA = true;
         break;
         case 'a':
         keyNoA = 2;
@@ -24,6 +25,7 @@ void keyPressed(){
         switch(keyCode){
             case UP:
             keyNoB = 1;
+            spinB = true;
             break;
             case LEFT:
             keyNoB = 2;
@@ -45,5 +47,12 @@ void keyReleased() {
     }
     else if(keyCode == 37||keyCode == 38||keyCode == 39||keyCode == 40){
         playB = false;
+    }
+
+    if(key == 'w'){
+        spinableA = true;
+    }
+    if(keyCode == 38){
+        spinableB = true;
     }
 }
