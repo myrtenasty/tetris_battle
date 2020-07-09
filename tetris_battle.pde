@@ -5,6 +5,7 @@ int turn = 0;
 int keyNoA = 0;
 int keyNoB = 0;
 int blockSize = 20;
+int globalFreshRate = 15;
 
 boolean playA = false;
 boolean playB = false;
@@ -15,6 +16,7 @@ boolean spinableA = true;
 boolean spinableB = true;
 
 blockClass tetrisBlock[] = new blockClass[3];
+pressClass control[] = new pressClass[2]; // control[0] for playerA, control[1] for player B
 
 int I[] = {1, 1, 1, 1, 0, 0, 0, 0}; // I block
 int J[] = {0, 0, 1, 0, 1, 1, 1, 0}; // J block
@@ -28,10 +30,13 @@ void setup(){
     size(Length, Width);
     frameRate(30);
     for(int i = 0; i < 3; i++){
-    int x = 1000;
-    int y = 500;
-    tetrisBlock[i] = new blockClass(x, y);
-}
+        int x = 1000;
+        int y = 500;
+        tetrisBlock[i] = new blockClass(x, y);
+    }
+    for(int j = 0; j <2; j++){
+        control[j] = new pressClass();
+    }
 }
 
 void draw(){
@@ -43,8 +48,24 @@ void draw(){
     // println("key is "+key);
     // println("keyCode is "+keyCode);
     // play();
-    tetrisBlock[0].drawBlock();
-    if((spinA || spinB) && (spinableA||spinableB)){
+
+    for(int c = 0; c <1; c++){
+        control[c].timerCount();
+        tetrisBlock[c].freshRate = control[c].drop(tetrisBlock[c].freshRate);
+        println("block y vel is "+tetrisBlock[c].yvel);
+        tetrisBlock[c].xvel = control[c].move(tetrisBlock[c].xvel);
+        println("block x vel is "+tetrisBlock[c].xvel);
+        if(tetrisBlock[c].ypos >= Width-blockSize*2){
+            tetrisBlock[c].xvel = 0;
+            tetrisBlock[c].yvel = 0;
+            spinableA = false;
+            spinableB = false;
+        }
+    }
+    println("block A is under control: "+control[0].on);
+
+    tetrisBlock[0].draw();
+    if(control[0].up && spinableA){
         tetrisBlock[0].dir = (tetrisBlock[0].dir+1)%4;
         spinableA = false;
         spinableB = false;

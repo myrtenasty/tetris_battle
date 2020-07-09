@@ -7,6 +7,7 @@ class blockClass
     int shape; // define the tetris bolock shape
     int type; // define block type, 0 for moving white, 1 for moving black, 2 for static white, 3 for static black
     int dir; // define the direction of block
+    int freshRate;
 
 
     blockClass(int x, int y){
@@ -14,14 +15,22 @@ class blockClass
         ypos = y;
         xvel = 0;
         yvel = 1;
-        shape = int(random(7));
-        type = int(random(2));
+        // shape = int(random(7));
+        shape = 4;
+        // type = int(random(2));
+        type = 1;
         dir = int(random(4));
+        freshRate = globalFreshRate;
     }
 
     void draw(){
-        xpos = xpos+xvel;
-        ypos = ypos+yvel;
+        if(frameCount%4 == 3){
+            xpos = xpos+xvel*blockSize;
+        }
+        if(frameCount%freshRate == freshRate-1){
+            ypos = ypos+yvel*blockSize;
+        }
+        drawBlock();
     }
 
     void drawBlock(){
@@ -55,16 +64,16 @@ class blockClass
             for(int i = 0; i < 8; i++){
                 noStroke();
                 if(type == 0 && block[i] == 0){
-                    fill(0);
-                    rect(xpos-(1-i/4)*blockSize, ypos-(2-i%4)*blockSize, blockSize, blockSize);
+                    // fill(0);
+                    // rect(xpos-(1-i/4)*blockSize, ypos-(2-i%4)*blockSize, blockSize, blockSize);
                 }
                 else if(type == 0 && block[i] == 1){
                     fill(255);
                     rect(xpos-(1-i/4)*blockSize, ypos-(2-i%4)*blockSize, blockSize, blockSize);
                 }
                 else if(type == 1 && block[i] == 0){
-                    fill(255);
-                    rect(xpos-(1-i/4)*blockSize, ypos-(2-i%4)*blockSize, blockSize, blockSize);
+                    // fill(255);
+                    // rect(xpos-(1-i/4)*blockSize, ypos-(2-i%4)*blockSize, blockSize, blockSize);
                 }
                 else if(type == 1 && block[i] == 1){
                     fill(0);
@@ -98,19 +107,19 @@ class blockClass
                 noStroke();
                 if(type == 0 && block[i] == 0){
                     fill(0);
-                    rect(xpos-(i/4)*blockSize, ypos+(i%4-1)*blockSize, blockSize, blockSize);
+                    rect(xpos-(i/4)*blockSize, ypos+(1-i%4)*blockSize, blockSize, blockSize);
                 }
                 else if(type == 0 && block[i] == 1){
                     fill(255);
-                    rect(xpos-(i/4)*blockSize, ypos+(i%4-1)*blockSize, blockSize, blockSize);
+                    rect(xpos-(i/4)*blockSize, ypos+(1-i%4)*blockSize, blockSize, blockSize);
                 }
                 else if(type == 1 && block[i] == 0){
                     fill(255);
-                    rect(xpos-(i/4)*blockSize, ypos+(i%4-1)*blockSize, blockSize, blockSize);
+                    rect(xpos-(i/4)*blockSize, ypos+(1-i%4)*blockSize, blockSize, blockSize);
                 }
                 else if(type == 1 && block[i] == 1){
                     fill(0);
-                    rect(xpos-(i/4)*blockSize, ypos+(i%4-1)*blockSize, blockSize, blockSize);
+                    rect(xpos-(i/4)*blockSize, ypos+(1-i%4)*blockSize, blockSize, blockSize);
                 }
             }
             break;
