@@ -1,3 +1,4 @@
+// set window size
 int Length = 1920;
 int Width = 1080;
 
